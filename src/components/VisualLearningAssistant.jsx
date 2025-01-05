@@ -20,6 +20,7 @@ const VisualLearningAssistant = () => {
   const audioRef = useRef(null);
   const [sessions, setSessions] = useState([]);
   const [userId] = useState('user123');
+  const [cameraFacingMode, setCameraFacingMode] = useState('user');
 
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -56,7 +57,9 @@ const VisualLearningAssistant = () => {
   // Camera handlers
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: cameraFacingMode },
+      });
       videoStreamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -64,6 +67,14 @@ const VisualLearningAssistant = () => {
       setIsCameraOn(true);
     } catch (err) {
       console.error('Error accessing camera:', err);
+    }
+  };
+
+  const flipCamera = () => {
+    const newFacingMode = cameraFacingMode === 'user' ? 'environment' : 'user';
+    setCameraFacingMode(newFacingMode);
+    if (isCameraOn) {
+      startCamera();
     }
   };
 
@@ -196,7 +207,9 @@ const VisualLearningAssistant = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">Visual Learning Assistant</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center md:text-left">
+          Visual Learning Assistant
+        </h1>
 
         {/* Camera Section */}
         <div className="mb-6">
@@ -211,12 +224,20 @@ const VisualLearningAssistant = () => {
                   style={{ display: isCameraOn ? 'block' : 'none' }}
                 />
                 {isCameraOn ? (
-                  <button
-                    onClick={captureImage}
-                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    Capture
-                  </button>
+                  <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
+                    <button
+                      onClick={captureImage}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      Capture
+                    </button>
+                    <button
+                      onClick={flipCamera}
+                      className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                    >
+                      Flip Camera
+                    </button>
+                  </div>
                 ) : (
                   <button
                     onClick={startCamera}
