@@ -157,6 +157,7 @@ const VisualLearningAssistant = () => {
         const fileName = data.voice_solution.split('/')[1];
         console.log("🚀 ~ submitDoubt ~ fileName:", fileName)
         setAudioUrl(`${baseUrl}/audio/${fileName}`);
+        audioRef.current = null;
       }
     } catch (err) {
       console.error('Error submitting doubt:', err);
