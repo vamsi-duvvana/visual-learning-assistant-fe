@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Camera, Mic, Send, StopCircle, PlayCircle, PauseCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { baseUrl } from '../constants';
 
 const VisualLearningAssistant = () => {
   // State management
@@ -100,7 +101,7 @@ const VisualLearningAssistant = () => {
   const submitDoubt = async () => {
     if (isRecording) {
       stopRecording();
-      await new Promise(resolve => setTimeout(resolve, 500)); // Wait for chunks to be collected
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     setIsLoading(true);
@@ -118,7 +119,7 @@ const VisualLearningAssistant = () => {
     formData.append('text_context', context);
 
     try {
-      const response = await fetch('http://localhost:8000/solve_doubt', {
+      const response = await fetch(`${baseUrl}/solve_doubt`, {
         method: 'POST',
         body: formData,
       });
@@ -130,7 +131,7 @@ const VisualLearningAssistant = () => {
       if (data.voice_solution) {
         const fileName = data.voice_solution.split('/')[1];
         console.log("🚀 ~ submitDoubt ~ fileName:", fileName)
-        setAudioUrl(`http://localhost:8000/audio/${fileName}`);
+        setAudioUrl(`${baseUrl}/audio/${fileName}`);
       }
     } catch (err) {
       console.error('Error submitting doubt:', err);

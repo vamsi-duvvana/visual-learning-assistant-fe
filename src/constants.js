@@ -1,0 +1,1 @@
+export const baseUrl =  "https://visual-learning-assitant-be.onrender.com"
