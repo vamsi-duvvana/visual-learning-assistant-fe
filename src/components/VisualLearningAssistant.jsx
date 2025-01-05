@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Camera, Mic, Send, StopCircle, PlayCircle, PauseCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { baseUrl } from '../constants';
+import Sessions from './Sessions';
+
 
 const VisualLearningAssistant = () => {
   // State management
@@ -16,10 +18,27 @@ const VisualLearningAssistant = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioError, setAudioError] = useState(null);
   const audioRef = useRef(null);
+  const [sessions, setSessions] = useState([]);
+  const [userId] = useState('user123');
 
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const videoStreamRef = useRef(null);
+
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/sessions/${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch sessions');
+        const data = await response.json();
+        setSessions(data);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    };
+
+    fetchSessions();
+  }, [userId]);
 
   // Cleanup effect for audio and video streams
   useEffect(() => {
@@ -126,6 +145,12 @@ const VisualLearningAssistant = () => {
 
       const data = await response.json();
       setSolution(data);
+
+      const sessionsResponse = await fetch(`${baseUrl}/sessions/${userId}`);
+      if (sessionsResponse.ok) {
+        const newSessions = await sessionsResponse.json();
+        setSessions(newSessions);
+      }
 
       // Set up audio URL
       if (data.voice_solution) {
@@ -284,6 +309,13 @@ const VisualLearningAssistant = () => {
           </div>
         )}
       </div>
+      <Sessions
+        sessions={sessions}
+        onSessionClick={(session) => {
+          setSolution(session.solution);
+          setContext(session.context);
+        }}
+      />
     </div>
   );
 };
