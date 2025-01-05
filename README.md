@@ -1,8 +1,29 @@
-# React + Vite
+# Visual Learning Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive learning platform that helps students solve academic problems through image recognition, voice input, and AI-powered solutions.
 
-Currently, two official plugins are available:
+## Features
+- 📸 Image capture for problem recognition
+- 🎙️ Voice input support
+- ✍️ Text input capability
+- 🔊 Text-to-Speech solution playback
+- 📝 Markdown-formatted solutions
+- 🎯 Real-time camera preview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- Frontend: React.js, TailwindCSS
+- Backend: FastAPI
+- AI/ML: Open AI
+- Media: Web Speech API, MediaRecorder API
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/vamsi-duvvana/visual-learning-assistant-fe
+
+# Install dependencies
+npm install
+
+# Run the application
+npm run dev
